@@ -21,3 +21,4 @@ node_modules
 /app_server/models/readBase.js
 /data/
 /config.env
+/.prettierrc

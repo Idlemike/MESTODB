@@ -1,4 +1,4 @@
-# This site was built using GitHub Pages <https://idlemike.github.io/sprint13/>
+# This is REST API  of the programm "MESTO"
 ***
 ## **Version 1.0.2**
 ***
@@ -38,4 +38,3 @@ Node_modules
 None
 ***
 ## **GH pages link**
-<https://idlemike.github.io/sprint13/>
