@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
     required: [true, 'A name must have a name'],
     minlength: 2,
     maxlength: 30,
-    unique: true,
   },
   about: {
     type: String,

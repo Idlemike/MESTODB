@@ -10,8 +10,7 @@ process.on('uncaughtException', (err) => {
 dotenv.config({ path: './config.env' });
 const app = require('../app');
 
-const DB = process.env.DATABASE_LOCAL;
-
+const DB = 'mongodb://localhost:27017/mestodb';
 mongoose
   .connect(DB, {
     useNewUrlParser: true,

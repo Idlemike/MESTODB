@@ -1,6 +1,6 @@
 # This site was built using GitHub Pages <https://idlemike.github.io/sprint13/>
 ***
-## **Version 1.0.0**
+## **Version 1.0.2**
 ***
 ## **about project**
 It's a training project of Sprint 13 Yandex-Praktikum on theme: "NODEJS"

@@ -15,9 +15,8 @@ app.use(express.json());
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '5f2aecabc3d04d5a3818eab', // вставьте сюда _id созданного в предыдущем пункте пользователя
+    _id: '5f34222e8be9ce6a5c3021d0', // вставьте сюда _id созданного в предыдущем пункте пользователя
   };
-
   next();
 });
 
@@ -29,9 +28,6 @@ app.use((req, res, next) => {
 // 3) ROUTES
 app.use('/users', userRouter);
 app.use('/cards', cardsRouter);
-
-/*PUBLIC*/
-/*app.use('/', express.static(path.join(__dirname, 'public')));*/
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

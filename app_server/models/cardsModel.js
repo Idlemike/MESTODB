@@ -7,10 +7,9 @@ const cardSchema = new mongoose.Schema({
     required: [true, 'A card must have a name'],
     maxlength: [30, 'A tour name must have less or equal then 30 characters'],
     minlength: [2, 'A tour name must have more or equal then 2 characters'],
-    unique: true,
   },
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.ObjectId,
     required: [true, 'An owner is required'],
   },
   link: {
@@ -22,15 +21,16 @@ const cardSchema = new mongoose.Schema({
   },
   likes: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: 'card',
+      default: [],
     },
   ],
   createdAt: {
     type: Date,
     default: Date.now(),
   },
-  default: [],
+
 });
 
 module.exports = mongoose.model('card', cardSchema);

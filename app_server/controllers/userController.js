@@ -1,15 +1,18 @@
-//const path = require('path');
 const userModel = require('../models/usersModel');
+const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
+
 /*USERS*/
 exports.getAllUsers = catchAsync(async (req, res) => {
-  const allUsersSchedule = await userModel.find();
+  const features = new APIFeatures(userModel.find(), req.query).filter().sort().limitFields()
+    .paginate();
+  const users = await features.query;
   res.status(200).json({
     status: 'success',
     requestedAt: req.requestTime,
-    results: allUsersSchedule.length,
+    results: users.length,
     data: {
-      allUsersSchedule,
+      data: users,
     },
   });
 });
@@ -29,18 +32,18 @@ exports.getUser = catchAsync(async (req, res) => {
 
 exports.postUser = catchAsync(async (req, res) => {
   // console.log(req.body);
-  const newUser = await userModel.create(req.body);
+  const user = await userModel.create(req.body);
   res.status(201).json({
     status: 'success',
     requestedAt: req.requestTime,
     data: {
-      user: newUser,
+      user: user,
     },
   });
 });
 
 exports.patchUser = catchAsync(async (req, res) => {
-  const newUser = await userModel.findByIdAndUpdate(req.user._id, req.body, {
+  const user = await userModel.findByIdAndUpdate(req.user._id, req.body, {
     new: true,
     runValidators: true,
   });
@@ -48,13 +51,13 @@ exports.patchUser = catchAsync(async (req, res) => {
     status: 'success',
     requestedAt: req.requestTime,
     data: {
-      newUser,
+      user,
     },
   });
 });
 
 exports.patchUserAvatar = catchAsync(async (req, res) => {
-  const newUser = await userModel.findByIdAndUpdate(req.user._id, req.body, {
+  const user = await userModel.findByIdAndUpdate(req.user._id, req.body, {
     new: true,
     runValidators: true,
   });
@@ -62,7 +65,7 @@ exports.patchUserAvatar = catchAsync(async (req, res) => {
     status: 'success',
     requestedAt: req.requestTime,
     data: {
-      newUser,
+      user,
     },
   });
 });
