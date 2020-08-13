@@ -2,7 +2,7 @@ const AppError = require('../utils/appError');
 
 const handleCastErrorDB = (err) => {
   const message = `Invalid ${err.path}: ${err.value}.`;
-  return new AppError(message, 400);
+  return new AppError(message, 404);
 };
 
 const handleValidationErrorDB = (err) => {
@@ -18,7 +18,6 @@ const sendErrorDev = (err, res) => {
 };
 
 module.exports = (err, req, res, next) => {
-  console.log(err.name);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
@@ -28,5 +27,7 @@ module.exports = (err, req, res, next) => {
   } else if (err.name === 'ValidationError') {
     const error = handleValidationErrorDB(err);
     sendErrorDev(error, res);
+  } else {
+    sendErrorDev(err, res);
   }
 };

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const userModel = require('./usersModel');
 const validateURL = require('../utils/validateURL');
 
 const cardSchema = new mongoose.Schema({
@@ -10,6 +11,7 @@ const cardSchema = new mongoose.Schema({
   },
   owner: {
     type: mongoose.Schema.ObjectId,
+    ref: userModel,
     required: [true, 'An owner is required'],
   },
   link: {
@@ -22,7 +24,7 @@ const cardSchema = new mongoose.Schema({
   likes: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: 'card',
+      ref: userModel,
       default: [],
     },
   ],

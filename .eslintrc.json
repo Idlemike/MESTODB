@@ -1,14 +1,11 @@
 {
    "env": {
-    "browser": true,
     "es2020": true,
     "node": true
   },
 
   "extends": [
-    "airbnb"
-  ],
-  "plugins": [
+    "airbnb-base"
   ],
   "ignorePatterns": ["/public", "/.git", "node_modules"],
   "rules": {
