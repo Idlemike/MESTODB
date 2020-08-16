@@ -19,6 +19,7 @@ exports.getCards = catchAsync(async (req, res, next) => {
   // SEND RESPONSE
   res.status(200).json({
     status: 'success',
+    requestedAt: req.requestTime,
     data: {
       cards,
     },
@@ -33,6 +34,7 @@ exports.getCard = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: 'success',
+    requestedAt: req.requestTime,
     data: {
       card,
     },
@@ -44,6 +46,7 @@ exports.postCard = catchAsync(async (req, res, next) => {
   const card = await Card.create({ name: name, link: link, owner: req.user._id });
   res.status(201).json({
     status: 'success',
+    requestedAt: req.requestTime,
     data: {
       card,
     },
@@ -57,6 +60,7 @@ exports.deleteCard = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: 'success',
+    requestedAt: req.requestTime,
   });
 });
 
@@ -71,6 +75,7 @@ exports.likeCard = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: 'success',
+    requestedAt: req.requestTime,
     data: card,
   });
 });
@@ -86,6 +91,7 @@ exports.dislikeCard = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: 'success',
+    requestedAt: req.requestTime,
     data: card,
   });
 });

@@ -11,8 +11,10 @@ const handleValidationErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
-const sendErrorDev = (err, res) => {
+const sendErrorDev = (err, req, res) => {
   res.status(err.statusCode).json({
+    status: err.status,
+    requestedAt: req.requestTime,
     message: err.message,
   });
 };
@@ -23,11 +25,11 @@ module.exports = (err, req, res, next) => {
 
   if (err.name === 'CastError') {
     const error = handleCastErrorDB(err);
-    sendErrorDev(error, res);
+    sendErrorDev(error, req, res);
   } else if (err.name === 'ValidationError') {
     const error = handleValidationErrorDB(err);
-    sendErrorDev(error, res);
+    sendErrorDev(error, req, res);
   } else {
-    sendErrorDev(err, res);
+    sendErrorDev(err, req, res);
   }
 };
