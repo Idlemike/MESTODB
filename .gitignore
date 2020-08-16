@@ -1,0 +1,15 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+# Logs
+# Dependency directory
+node_modules
+
+# Optional npm cache directory
+# Optional REPL history
+/app_server/models/readBase.js
+/data/
+/config.env

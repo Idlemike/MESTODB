@@ -1,0 +1,40 @@
+{
+  "name": "sprint13",
+  "version": "1.0.3",
+  "description": "Yandex Praktikum training project",
+  "main": "app.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon bin/server.js",
+    "build": "cross-env NODE_ENV=production nodemon bin/server.js",
+    "debug_dev": "cross-env NODE_ENV=development ndb bin/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://githrub.com/Idlemike/sprint13.git"
+  },
+  "keywords": [],
+  "author": "Andrushenko Mihail",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.29",
+    "morgan": "^1.10.0",
+    "ndb": "^1.1.5"
+  },
+  "bugs": {
+    "url": "https://github.com/Idlemike/sprint13/issues"
+  },
+  "homepage": "https://github.com/Idlemike/sprint13#readme",
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "eslint": "^7.6.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "nodemon": "^2.0.4",
+    "pretty-quick": "^2.0.1"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  }
+}
