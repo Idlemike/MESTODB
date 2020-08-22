@@ -2,7 +2,7 @@
   "name": "sprint13",
   "version": "1.0.3",
   "description": "Yandex Praktikum training project",
-  "main": "app.js",
+  "main": "bin/server.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon bin/server.js",
     "build": "cross-env NODE_ENV=production nodemon bin/server.js",
@@ -16,11 +16,14 @@
   "author": "Andrushenko Mihail",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.29",
     "morgan": "^1.10.0",
-    "ndb": "^1.1.5"
+    "ndb": "^1.1.5",
+    "validator": "^13.1.1"
   },
   "bugs": {
     "url": "https://github.com/Idlemike/sprint13/issues"

@@ -11,14 +11,8 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-  req.user = {
-    _id: '5f34222e8be9ce6a5c3021d0', // вставьте сюда _id созданного в предыдущем пункте пользователя
-  };
-  next();
-});
-
-app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  console.log(req.headers);
   next();
 });
 
