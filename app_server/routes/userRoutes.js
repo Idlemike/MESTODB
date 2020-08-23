@@ -5,6 +5,7 @@ const {
   patchUser,
   patchUserAvatar,
   updateMe,
+  deleteMe,
   /*  checkID,*/
 } = require('../controllers/userController');
 const authController = require('../controllers/authController');
@@ -24,5 +25,6 @@ router.route('/me/avatar').patch(auth.protect, patchUserAvatar);
 router.route('/updateMyPassword').patch(auth.protect, authController.updatePassword);
 
 router.route('/updateMe').patch(auth.protect, updateMe);
+router.route('/deleteMe').delete(auth.protect, deleteMe);
 
 module.exports = router;
