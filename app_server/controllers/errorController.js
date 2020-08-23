@@ -14,7 +14,7 @@ const handleValidationErrorDB = (err) => {
 const handleDuplicateFieldsDB = () => {
   // const value = err.message.match(/(["'])(?:\\.|[^\\])*?\1/)[0];
   const message = 'Duplicate field. Please use another email!';
-  return new AppError(message, 400);
+  return new AppError(message, 409);
 };
 
 const handleJWTError = () => new AppError('Invalid token. Please log in again!', 401);

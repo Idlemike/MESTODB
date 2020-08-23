@@ -6,13 +6,9 @@ const {
   patchUserAvatar,
   /*  checkID,*/
 } = require('../controllers/userController');
-const authController = require('../controllers/authController');
 const auth = require('../middlewares/auth');
 
 const router = express.Router();
-
-router.route('/signup').post(authController.signup);
-router.post('/signin', authController.login);
 
 router.route('/').get(auth.protect, getAllUsers);
 

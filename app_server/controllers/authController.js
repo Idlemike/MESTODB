@@ -3,11 +3,16 @@ const User = require('../models/usersModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-const signToken = (id) => jwt.sign({ id }, 'my-ultra-secure-secret', {
-  expiresIn: '90d',
+const signToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, {
+  expiresIn: process.env.JWT_EXPIRES_IN,
 });
 
-exports.signup = catchAsync(async (req, res, next) => {
+exports.createUser = catchAsync(async (req, res, next) => {
+  let { password } = req.body;
+  password = password.match(/(\S){8,20}/);
+  if (!password) {
+    return next(new AppError('Please provide password!It should contain from 6 to 20 digits and letters and symbols @#$%', 400));
+  }
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
