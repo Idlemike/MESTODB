@@ -3,6 +3,7 @@ const AppError = require('./app_server/utils/appError');
 const globalErrorHandler = require('./app_server/controllers/errorController');
 const userRouter = require('./app_server/routes/userRoutes');
 const cardsRouter = require('./app_server/routes/cardsRoutes');
+const { createUser, login } = require('./app_server/controllers/authController');
 
 const app = express();
 
@@ -19,6 +20,9 @@ app.use((req, res, next) => {
 // 3) ROUTES
 app.use('/users', userRouter);
 app.use('/cards', cardsRouter);
+
+app.post('/signin', login);
+app.post('/signup', createUser);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
