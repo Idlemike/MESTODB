@@ -4,6 +4,7 @@ const {
   getUser,
   patchUser,
   patchUserAvatar,
+  updateMe,
   /*  checkID,*/
 } = require('../controllers/userController');
 const authController = require('../controllers/authController');
@@ -20,6 +21,8 @@ router.route('/:id').get(auth.protect, getUser);
 router.route('/me').patch(auth.protect, patchUser);
 router.route('/me/avatar').patch(auth.protect, patchUserAvatar);
 
-router.patch('/updateMyPassword', auth.protect, authController.updatePassword);
+router.route('/updateMyPassword').patch(auth.protect, authController.updatePassword);
+
+router.route('/updateMe').patch(auth.protect, updateMe);
 
 module.exports = router;
