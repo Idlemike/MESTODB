@@ -32,17 +32,6 @@ exports.getUser = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.postUser = catchAsync(async (req, res, next) => {
-  // console.log(req.body);
-  const user = await userModel.create(req.body);
-  res.status(201).json({
-    status: 'success',
-    data: {
-      user: user,
-    },
-  });
-});
-
 exports.patchUser = catchAsync(async (req, res, next) => {
   const { name, about } = req.body;
   const user = await userModel.findByIdAndUpdate(req.user._id, { name: name, about: about }, {

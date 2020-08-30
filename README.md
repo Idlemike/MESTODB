@@ -1,6 +1,6 @@
 # This is REST API  of the programm "MESTO"
 ***
-## **Version 1.0.2**
+## **Version 1.1.0**
 ***
 ## **about project**
 It's a training project of Sprint 13 Yandex-Praktikum on theme: "NODEJS"

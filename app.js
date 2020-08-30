@@ -1,30 +1,63 @@
 const express = require('express');
+const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
+
 const AppError = require('./app_server/utils/appError');
 const globalErrorHandler = require('./app_server/controllers/errorController');
 const userRouter = require('./app_server/routes/userRoutes');
 const cardsRouter = require('./app_server/routes/cardsRoutes');
+const { login, createUser } = require('./app_server/controllers/authController');
 
 const app = express();
 
-// 1) MIDDLEWARES
+// 1) GLOBAL MIDDLEWARES
+// Set security HTTP headers
+app.use(helmet());
 
-app.use(express.json());
+// Development logging
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '5f34222e8be9ce6a5c3021d0', // вставьте сюда _id созданного в предыдущем пункте пользователя
-  };
-  next();
+// Limit requests from same API
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour!',
 });
 
+app.use('/', limiter);
+
+// Body parser, reading data from body into req.body
+app.use(express.json({ limit: '10kb' }));
+
+// Data sanitation against No SQL query injection
+app.use(mongoSanitize());
+// Data sanitation against XSS
+app.use(xss());
+
+// Prevent parameter pollution
+app.use(hpp({
+  whitelist: ['name', 'createdAt'],
+}));
+
+// Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  // console.log(req.headers);
   next();
 });
 
 // 3) ROUTES
 app.use('/users', userRouter);
 app.use('/cards', cardsRouter);
+
+app.post('/signin', login);
+app.post('/signup', createUser);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
