@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const userModel = require('./usersModel');
+// const userModel = require('./usersModel');
 const validateURL = require('../utils/validateURL');
 
 const cardSchema = new mongoose.Schema({
@@ -11,7 +11,7 @@ const cardSchema = new mongoose.Schema({
   },
   owner: {
     type: mongoose.Schema.ObjectId,
-    ref: userModel,
+    ref: 'User',
     required: [true, 'An owner is required'],
   },
   link: {
@@ -24,7 +24,7 @@ const cardSchema = new mongoose.Schema({
   likes: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: userModel,
+      ref: 'User',
       default: [],
     },
   ],
@@ -32,7 +32,27 @@ const cardSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+});
 
+// QUERY MIDDLEWARE
+cardSchema.pre(/^find/, function (next) {
+  this.start = Date.now();
+  next();
+});
+cardSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'owner',
+    select: '-__v -passwordChangedAt',
+  }).populate({
+    path: 'likes',
+    select: 'name',
+  });
+  next();
+});
+cardSchema.post(/^find/, function (docs, next) {
+  console.log(`Query took ${Date.now() - this.start} milliseconds!`);
+  // console.log(docs);
+  next();
 });
 
 module.exports = mongoose.model('card', cardSchema);

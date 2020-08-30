@@ -11,9 +11,10 @@ const handleValidationErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
-const handleDuplicateFieldsDB = () => {
+const handleDuplicateFieldsDB = (err) => {
   // const value = err.message.match(/(["'])(?:\\.|[^\\])*?\1/)[0];
-  const message = 'Duplicate field. Please use another email!';
+  //const error = JSON.stringify(err.keyValue);
+  const message = `Duplicate field ${JSON.stringify(err.keyValue)}. Please use another value!`;
   return new AppError(message, 409);
 };
 
@@ -35,10 +36,11 @@ module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
   let error = { ...err };
+  console.log(err);
 
   if (err.name === 'CastError') error = handleCastErrorDB(err);
   if (err.name === 'ValidationError') error = handleValidationErrorDB(err);
-  if (err.code === 11000) error = handleDuplicateFieldsDB();
+  if (err.code === 11000) error = handleDuplicateFieldsDB(err);
   if (err.name === 'JsonWebTokenError') error = handleJWTError();
   if (err.name === 'TokenExpiredError') error = handleJWTExpiredError();
   sendErrorDev(error, req, res);
