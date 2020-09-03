@@ -5,6 +5,7 @@
 # IntelliJ project files
 .idea
 # Logs
+*.log
 # Dependency directory
 node_modules
 

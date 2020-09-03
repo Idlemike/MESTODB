@@ -15,6 +15,7 @@ const globalErrorHandler = require('./app_server/controllers/errorController');
 const userRouter = require('./app_server/routes/userRoutes');
 const cardsRouter = require('./app_server/routes/cardsRoutes');
 const { login, createUser } = require('./app_server/controllers/authController');
+const { requestLogger, errorLogger } = require('./app_server/middlewares/logger');
 
 const app = express();
 app.use(BodyParser.json());
@@ -57,6 +58,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(requestLogger); // подключаем логгер запросов
+
 // SIGNUP. selebrate, Joi
 app.post('/signup', celebrate({
   [Segments.BODY]: Joi.object().keys({
@@ -76,7 +79,10 @@ app.post('/signin', celebrate({
     password: Joi.string().required().min(8),
   }),
 }), login);
-app.use(errors());
+
+app.use(errorLogger); // подключаем логгер ошибок
+
+app.use(errors()); // обработчик ошибок celebrate
 
 // 3) ROUTES
 app.use('/users', userRouter);
