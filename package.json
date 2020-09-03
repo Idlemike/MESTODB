@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon bin/server.js",
     "build": "cross-env NODE_ENV=production nodemon bin/server.js",
-    "debug_dev": "cross-env NODE_ENV=development ndb bin/server.js"
+    "debug_dev": "cross-env NODE_ENV=development ndb bin/server.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "eslint": "^7.6.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
+    "jest": "^26.4.2",
     "nodemon": "^2.0.4"
   },
   "engines": {
