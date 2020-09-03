@@ -1,4 +1,8 @@
 const express = require('express');
+const BodyParser = require('body-parser');
+const {
+  celebrate, Joi, errors, Segments,
+} = require('celebrate');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -13,6 +17,7 @@ const cardsRouter = require('./app_server/routes/cardsRoutes');
 const { login, createUser } = require('./app_server/controllers/authController');
 
 const app = express();
+app.use(BodyParser.json());
 
 // 1) GLOBAL MIDDLEWARES
 // Set security HTTP headers
@@ -52,12 +57,33 @@ app.use((req, res, next) => {
   next();
 });
 
+// SIGNUP. selebrate, Joi
+app.post('/signup', celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30),
+    about: Joi.string().required().min(2).max(30),
+    role: Joi.string().default('user'),
+    email: Joi.string().required(),
+    password: Joi.string().required().min(8),
+    avatar: Joi.string().required().lowercase(),
+  }),
+}), createUser);
+
+// SIGNIN. selebrate, Joi
+app.post('/signin', celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    email: Joi.string().required(),
+    password: Joi.string().required().min(8),
+  }),
+}), login);
+app.use(errors());
+
 // 3) ROUTES
 app.use('/users', userRouter);
 app.use('/cards', cardsRouter);
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+// app.post('/signin', login);
+// app.post('/signup', createUser);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
