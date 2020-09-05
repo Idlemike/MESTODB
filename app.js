@@ -3,6 +3,7 @@ const BodyParser = require('body-parser');
 const {
   celebrate, Joi, errors, Segments,
 } = require('celebrate');
+const joiObjectId = require('joi-objectid');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -16,9 +17,24 @@ const userRouter = require('./app_server/routes/userRoutes');
 const cardsRouter = require('./app_server/routes/cardsRoutes');
 const { login, createUser } = require('./app_server/controllers/authController');
 const { requestLogger, errorLogger } = require('./app_server/middlewares/logger');
+const {
+  getUser,
+  patchUser,
+  patchUserAvatar,
+} = require('./app_server/controllers/userController');
+const {
+  postCard,
+  deleteCard,
+  likeCard,
+  getCard,
+  dislikeCard,
+} = require('./app_server/controllers/cardsController');
+const auth = require('./app_server/middlewares/auth');
 
 const app = express();
 app.use(BodyParser.json());
+// add joi-objectId to Joi
+Joi.objectId = joiObjectId(Joi);
 
 // 1) GLOBAL MIDDLEWARES
 // Set security HTTP headers
@@ -60,6 +76,13 @@ app.use((req, res, next) => {
 
 app.use(requestLogger); // подключаем логгер запросов
 
+// test crash
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 // SIGNUP. selebrate, Joi
 app.post('/signup', celebrate({
   [Segments.BODY]: Joi.object().keys({
@@ -80,16 +103,74 @@ app.post('/signin', celebrate({
   }),
 }), login);
 
+// требуем поле авторизации для всех запросов, кроме signin signup
+app.use(celebrate({
+  [Segments.HEADERS]: Joi.object({
+    authorization: Joi.string().required(),
+  }).unknown(),
+}));
+
+// 3) ROUTES
+// USERS
+app.get('/users/:id', celebrate({
+  [Segments.PARAMS]: Joi.object().keys({
+    id: Joi.objectId(),
+  }),
+}), auth.protect, getUser);
+
+app.patch('/users/me', celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    name: Joi.string().required(),
+    about: Joi.string().required(),
+  }),
+}), auth.protect, patchUser);
+
+app.patch('/users/me/avatar', celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    avatar: Joi.string().required(),
+  }),
+}), auth.protect, patchUserAvatar);
+
+app.use('/users', userRouter);
+
+// CARDS
+app.put('/cards/:id/likes', celebrate({
+  [Segments.PARAMS]: Joi.object().keys({
+    id: Joi.objectId(),
+  }),
+}), auth.protect, likeCard);
+
+app.delete('/cards/:id/likes', celebrate({
+  [Segments.PARAMS]: Joi.object().keys({
+    id: Joi.objectId(),
+  }),
+}), auth.protect, dislikeCard);
+
+app.post('/cards', celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30),
+    link: Joi.string().required(),
+  }),
+}), auth.protect, postCard);
+
+app.delete('/cards/:id', celebrate({
+  [Segments.PARAMS]: Joi.object().keys({
+    id: Joi.objectId(),
+  }),
+}), auth.protect,
+auth.restrictTo, deleteCard);
+
+app.get('/cards/:id', celebrate({
+  [Segments.PARAMS]: Joi.object().keys({
+    id: Joi.objectId(),
+  }),
+}), auth.protect, getCard);
+
+app.use('/cards', cardsRouter);
+
 app.use(errorLogger); // подключаем логгер ошибок
 
 app.use(errors()); // обработчик ошибок celebrate
-
-// 3) ROUTES
-app.use('/users', userRouter);
-app.use('/cards', cardsRouter);
-
-// app.post('/signin', login);
-// app.post('/signup', createUser);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
