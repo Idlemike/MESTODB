@@ -13,7 +13,7 @@ const handleValidationErrorDB = (err) => {
 
 const handleDuplicateFieldsDB = () => {
   // const value = err.message.match(/(["'])(?:\\.|[^\\])*?\1/)[0];
-  const message = 'Duplicate field. Please use another email!';
+  const message = 'Duplicate field.';
   return new AppError(message, 409);
 };
 
