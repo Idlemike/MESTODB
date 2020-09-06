@@ -38,7 +38,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
   let { password } = req.body;
   password = password.match(/(\S){8,20}/);
   if (!password) {
-    return next(new AppError('Please provide password!It should contain from 6 to 20 digits and letters and symbols @#$%', 400));
+    return next(new AppError('Please provide password!It should contain from 8 to 20 digits and letters and symbols @#$%', 400));
   }
   const newUser = await User.create({
     name: req.body.name,

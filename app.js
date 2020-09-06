@@ -86,19 +86,20 @@ app.get('/crash-test', () => {
 // SIGNUP. selebrate, Joi
 app.post('/signup', celebrate({
   [Segments.BODY]: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
+    name: Joi.string().alphanum().required().min(4)
+      .max(30),
     about: Joi.string().required().min(2).max(30),
     role: Joi.string().default('user'),
-    email: Joi.string().required(),
-    password: Joi.string().required().min(8),
-    avatar: Joi.string().required().lowercase(),
+    email: Joi.string().required().email(),
+    password: Joi.string().required().pattern(new RegExp('^[a-zA-Z0-9@#$%&]{8,30}$')),
+    avatar: Joi.string().required().lowercase().pattern(new RegExp('^(https?|HTTPS?):\\/\\/(www.|WWW.)?((([a-zA-Z0-9-]{1,63}\\.){1,256}[a-zA-Z]{2,6})|((\\d{1,3}\\.){3}\\d{1,3}))(:\\d{2,5})?([-a-zA-Z0-9_\\/.]{0,256}#?)?$')),
   }),
 }), createUser);
 
 // SIGNIN. selebrate, Joi
 app.post('/signin', celebrate({
   [Segments.BODY]: Joi.object().keys({
-    email: Joi.string().required(),
+    email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
   }),
 }), login);
@@ -149,7 +150,7 @@ app.delete('/cards/:id/likes', celebrate({
 app.post('/cards', celebrate({
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required(),
+    link: Joi.string().required().pattern(new RegExp('^(https?|HTTPS?):\\/\\/(www.|WWW.)?((([a-zA-Z0-9-]{1,63}\\.){1,256}[a-zA-Z]{2,6})|((\\d{1,3}\\.){3}\\d{1,3}))(:\\d{2,5})?([-a-zA-Z0-9_\\/.]{0,256}#?)?$')),
   }),
 }), auth.protect, postCard);
 

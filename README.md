@@ -1,6 +1,6 @@
 # [This is REST API  of the programm "MESTO"](https://www.3mak.tk)
 ***
-## **Version 1.1.0**
+## **Version 1.2.1**
 ***
 ## **about project**
 It's a training project of Sprint 13 Yandex-Praktikum on theme: "NODEJS"
